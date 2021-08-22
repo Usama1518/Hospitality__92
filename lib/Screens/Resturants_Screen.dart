@@ -13,16 +13,8 @@ class RestaurantsScreen extends StatefulWidget {
 class _RestaurantsScreenState extends State<RestaurantsScreen> {
 
   @override
-  void initState() {
-    super.initState();
-    // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: 'https://hospitality92.com/videos',
+    return Scaffold(
     );
 
   }

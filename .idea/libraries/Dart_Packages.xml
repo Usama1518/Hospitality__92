@@ -737,13 +737,6 @@
             </list>
           </value>
         </entry>
-        <entry key="webview_flutter">
-          <value>
-            <list>
-              <option value="C:/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.12/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="win32">
           <value>
             <list>
@@ -868,7 +861,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/wakelock_platform_interface-0.2.1+2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/wakelock_web-0.2.0+2/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/wakelock_windows-0.1.0+1/lib" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.12/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.5/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.1.2/lib" />
