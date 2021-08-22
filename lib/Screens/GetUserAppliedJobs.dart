@@ -33,9 +33,6 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
-
-
-    print("cjsdcj"+json.decode(response.body)['jobs/job'].toString());
     return json.decode(response.body)['jobs']; // this returns user applied jobs
   }
 
@@ -88,10 +85,13 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
                             var userSalary = snapshot.data![index]['salary'];
                             var userCareer = snapshot.data![index]['career'];
                             var userDocument = snapshot.data![index]['document'];
+                            var jobStatus = snapshot.data![index]['status'];
                             var job =  snapshot.data![index]['job'];
 
+                            var title = job['title'];
 
-                            print("svsdfvsfvsdfv" + job.toString());
+
+                            print("svsdfvsfvsdfv = " + title);
 
 
                             return GestureDetector(
@@ -119,7 +119,7 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   /*'Senior Developer'*/
-                                                  jobID.toString(),
+                                                  title,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(color: Colors.black87, fontSize: 12.0.sp, fontWeight: FontWeight.w800),
@@ -140,7 +140,7 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
                                                   width: kDefaultPadding.sp / 2,
                                                 ),
                                                 Text(
-                                                  "Rs. " + userCareer + " -" + userDocument,
+                                                  "Rs. " +userSalary,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontWeight: FontWeight.w600),
@@ -164,7 +164,7 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
                                                   ),
                                                   Text(
                                                     /*'Islamabad, Pakistan'*/
-                                                    userExperience,
+                                                    userDocument,
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),
@@ -176,8 +176,7 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
                                                     decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(kBorderRadius.sp / 2)),
                                                     child: Center(
                                                       child: Text(
-                                                        /*'Full-time'*/
-                                                        userSalary,
+                                                        jobStatus,
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(color: Colors.white, fontSize: 8.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),

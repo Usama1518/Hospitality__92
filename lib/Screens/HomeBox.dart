@@ -138,7 +138,7 @@ class _HomeBoxState extends State<HomeBox> {
               }),
               Container(
                 color: Colors.transparent,
-                height: 27.0.h,
+                height: 25.0.h,
                 child: FutureBuilder<List<dynamic>>(
                   future: getJobsData(),
                   builder: (context, snapshot) {
