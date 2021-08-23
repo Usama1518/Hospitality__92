@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hospitality_92/Utils/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class GetUserAppliedJob extends StatefulWidget {
@@ -15,25 +16,20 @@ class GetUserAppliedJob extends StatefulWidget {
 
 class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
 
-/*  List<String> allJobsList = [];
-  Future<List<dynamic>> getAllJobsData() async {
-    String url = 'https://hospitality92.com/api/jobsbycategory/All';
-    var response = await http.get(Uri.parse(url), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    });
-    allJobsList.add(json.decode(response.body)['jobs'].toString()); // here all jobs response added to list
-
-    return json.decode(response.body);
-  }*/
-
+  int? getUserId;
+  String? getJobStatus;
+  String? getJobsLength = "0";
   Future<List<dynamic>> getUserAppliedData() async {
-    String url = 'https://hospitality92.com/api/getappliedjobs/10';
+    var pref = await SharedPreferences.getInstance();
+    var userID = pref.getInt('userID');
+    print(userID);
+    getUserId = userID;
+    String url = 'https://hospitality92.com/api/getappliedjobs/$userID';
     var response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+       'Accept': 'application/json',
     });
-    return json.decode(response.body)['jobs']; // this returns user applied jobs
+    return json.decode(response.body)['jobs'];
   }
 
   @override
@@ -46,7 +42,7 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
         automaticallyImplyLeading: false,
         title: Text(
           "Applied Jobs",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 14.0.sp),
         ),
         leading: IconButton(
           icon: Icon(
@@ -68,137 +64,153 @@ class _GetUserAppliedJobState extends State<GetUserAppliedJob> {
               color: Colors.transparent,
               //height: 27.0.h,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FutureBuilder<List<dynamic>>(
-                  future: getUserAppliedData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding.sp / 2, vertical: kDefaultPadding.sp / 5),
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data?.length,
-                          itemBuilder: (context, index) {
-                            var jobID = int.parse(snapshot.data![index]['job_id']) ;
-                            var userExperience = snapshot.data![index]['experience'];
-                            var userSalary = snapshot.data![index]['salary'];
-                            var userCareer = snapshot.data![index]['career'];
-                            var userDocument = snapshot.data![index]['document'];
-                            var jobStatus = snapshot.data![index]['status'];
-                            var job =  snapshot.data![index]['job'];
+                padding:   EdgeInsets.all(8.0.sp),
+                child:  FutureBuilder<List<dynamic>>(
+                      future: getUserAppliedData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 12.0.sp, top: 8.0.sp, right: 8.0.sp, bottom: 8.0.sp),
+                                child: Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "You have applied for ${snapshot.data!.length} job/s",
+                                      style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.w500),
+                                    )),
+                              ),
 
-                            var title = job['title'];
+                                Padding(
+                                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding.sp / 2, vertical: kDefaultPadding.sp / 5),
+                                child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data?.length,
+                                  itemBuilder: (context, index) {
+                                    var jobsLength = snapshot.data?.length;
+                                    getJobsLength = jobsLength.toString();
+                                    var job = snapshot.data![index]['job'];
+                                    var title = job['title'];
+                                    var companyName = job['company_name'];
+                                    var minSalary = job['min_salary'];
+                                    var maxSalary = job['max_salary'];
+                                    var jobStatus = snapshot.data![index]['status'];
+                                    if(jobStatus == "1"){
+                                      getJobStatus = "Pending";
+                                    }else{
+                                      getJobStatus = "Completed";
+                                    }
 
-
-                            print("svsdfvsfvsdfv = " + title);
-
-
-                            return GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(left: kDefaultPadding.sp / 2, right: kDefaultPadding.sp / 2, bottom: kDefaultPadding.sp / 2),
-                                child: Material(
-                                  elevation: 2,
-                                  borderRadius: BorderRadius.circular(kBorderRadius.sp / 2),
-                                  child: Container(
-                                    height: 11.0.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(kBorderRadius.sp / 2),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: kBorderRadius.sp / 2),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                              height: 4.0.h,
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  /*'Senior Developer'*/
-                                                  title,
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(color: Colors.black87, fontSize: 12.0.sp, fontWeight: FontWeight.w800),
-                                                ),
-                                              )),
-                                          Container(
-                                            height: 3.0.h,
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Icon(
-                                                  Icons.monetization_on_outlined,
-                                                  color: Colors.grey,
-                                                  size: 12.0.sp,
-                                                ),
-                                                SizedBox(
-                                                  width: kDefaultPadding.sp / 2,
-                                                ),
-                                                Text(
-                                                  "Rs. " +userSalary,
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontWeight: FontWeight.w600),
-                                                )
-                                              ],
+                                    return GestureDetector(
+                                      onTap: () {},
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: kDefaultPadding.sp / 2, right: kDefaultPadding.sp / 2, bottom: kDefaultPadding.sp / 2),
+                                        child: Material(
+                                          elevation: 2,
+                                          borderRadius: BorderRadius.circular(kBorderRadius.sp / 2),
+                                          child: Container(
+                                            height: 11.0.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(kBorderRadius.sp / 2),
                                             ),
-                                          ),
-                                          Container(
-                                              height: 3.0.h,
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: kBorderRadius.sp / 2),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  Icon(
-                                                    Icons.home_outlined,
-                                                    color: Colors.grey,
-                                                    size: 12.0.sp,
-                                                  ),
-                                                  SizedBox(
-                                                    width: kDefaultPadding.sp / 2,
-                                                  ),
-                                                  Text(
-                                                    /*'Islamabad, Pakistan'*/
-                                                    userDocument,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),
-                                                  ),
-                                                  Spacer(),
                                                   Container(
-                                                    width: 18.0.w,
+                                                      height: 4.0.h,
+                                                      child: Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Text(
+                                                          /*'Senior Developer'*/
+                                                          title,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(color: Colors.black87, fontSize: 12.0.sp, fontWeight: FontWeight.w600),
+                                                        ),
+                                                      )),
+                                                  Container(
                                                     height: 3.0.h,
-                                                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(kBorderRadius.sp / 2)),
-                                                    child: Center(
-                                                      child: Text(
-                                                        jobStatus,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(color: Colors.white, fontSize: 8.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),
-                                                      ),
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.monetization_on_outlined,
+                                                          color: Colors.grey,
+                                                          size: 12.0.sp,
+                                                        ),
+                                                        SizedBox(
+                                                          width: kDefaultPadding.sp / 2,
+                                                        ),
+                                                        Text(
+                                                          "Rs. " + minSalary + "-" + maxSalary,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                                        )
+                                                      ],
                                                     ),
-                                                  )
+                                                  ),
+                                                  Container(
+                                                      height: 3.0.h,
+                                                      child: Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.home_outlined,
+                                                            color: Colors.grey,
+                                                            size: 12.0.sp,
+                                                          ),
+                                                          SizedBox(
+                                                            width: kDefaultPadding.sp / 2,
+                                                          ),
+                                                          Text(
+                                                            /*'Islamabad, Pakistan'*/
+                                                            companyName,
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: TextStyle(color: Colors.grey, fontSize: 10.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),
+                                                          ),
+                                                          Spacer(),
+                                                          Container(
+                                                            width: 18.0.w,
+                                                            height: 3.0.h,
+                                                            decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(kBorderRadius.sp / 2)),
+                                                            child: Center(
+                                                              child: Text(
+                                                                getJobStatus!,
+                                                                maxLines: 1,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                style: TextStyle(color: Colors.white, fontSize: 8.0.sp, fontFamily: 'Mulish', fontWeight: FontWeight.w600),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )),
                                                 ],
-                                              )),
-                                        ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                ),
+                            ],
+
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    ),
+
               ),
             ),
           ],

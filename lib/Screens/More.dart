@@ -16,6 +16,7 @@ class _MoreSettingsState extends State<MoreSettings> {
   Future fetch() async {
     final pref = await SharedPreferences.getInstance();
     pref.remove("isLogIn");
+    pref.remove("userID");
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 

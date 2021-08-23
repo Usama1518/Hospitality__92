@@ -289,7 +289,6 @@ class _ApplyForJobState extends State<ApplyForJob> {
     final split = resp.split(',');
     final Map<int, String> values = {for (int i = 0; i < split.length; i++) i: split[i]};
     final value1 = values[0];
-    print("dcdsccccccccccd" + value1.toString());
 
     if (value1 == '"status":"300"') {
       SweetAlert.show(this.context, title: "Sorry $getUserName", subtitle: "You have already applied for this Job!!", style: SweetAlertStyle.error);

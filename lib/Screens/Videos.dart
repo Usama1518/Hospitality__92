@@ -49,7 +49,7 @@ class _VideosScreenState extends State<VideosScreen> {
             Center(
               child: Container(
                 //color: Colors.red,
-                child: FutureBuilder<List<dynamic>>(
+                child:  FutureBuilder<List<dynamic>>(
                   future: getVideosData(),
                   builder: (context, snapshot) {
                     print(snapshot.hasData);
@@ -78,7 +78,7 @@ class _VideosScreenState extends State<VideosScreen> {
                             child: Container(
                                 height: 30.0.h,
 
-                                child: Center(child: VideoItem('https://hospitality92.com/uploads/videos/$videoItem'))
+                                child: Center(child: VideoItem('https://hospitality92.com/uploads/videos/$video'))
                                 /*child: Center(child: VideoItem('https://hospitality92.com/uploads/videos/$video'))*/
                             ),
                           );

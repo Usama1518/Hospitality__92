@@ -16,6 +16,9 @@ class LatestJobs extends StatefulWidget {
 class _LatestJobsState extends State<LatestJobs> {
   late JobItem jobItem;
   var count = 0;
+  var isLoading = false;
+  var isInit = false;
+
 
 
   Future<List<dynamic>> getFilteredJObs({
@@ -59,7 +62,7 @@ class _LatestJobsState extends State<LatestJobs> {
       cityDropDownValue = cityDropDownValue;
       categoryDpValue = categoryDpValue;
       print("Here is value" + categoryDpValue);
-      jobData(cityDropDownValue, categoryDpValue);
+      isLoading ? Center(child: CircularProgressIndicator(),): jobData(cityDropDownValue, categoryDpValue);
     });
 
   }
@@ -68,6 +71,16 @@ class _LatestJobsState extends State<LatestJobs> {
   void initState() {
     getCityData();
     getFilteredJObs(city: '', searchCategories: '');
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    if(isInit){
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   @override
@@ -148,7 +161,7 @@ class _LatestJobsState extends State<LatestJobs> {
                   ],
                 ),
               ),
-              Padding(
+             /* Padding(
                 padding: EdgeInsets.only(
                   left: 12.0.sp,
                   top: 8.0.sp,
@@ -164,7 +177,7 @@ class _LatestJobsState extends State<LatestJobs> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               Column(
                 children: [
                   /*Padding(
@@ -183,10 +196,7 @@ class _LatestJobsState extends State<LatestJobs> {
                 ],
 
               ),
-              /*RefreshIndicator(
-                onRefresh: _pullRefresh,
-                child:
-              )*/
+
             ],
           ),
         ),
@@ -203,14 +213,16 @@ class _LatestJobsState extends State<LatestJobs> {
   }
 
   Widget jobData(String cityID, String catName) {
+    isLoading = false;
     return Container(
-      child: FutureBuilder<List<dynamic>>(
+      child:  FutureBuilder<List<dynamic>>(
         future: getFilteredJObs(city: cityID, searchCategories: catName),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Column(
+              child:
+              Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 12.0.sp, top: 8.0.sp, right: 8.0.sp, bottom: 8.0.sp),
@@ -221,11 +233,12 @@ class _LatestJobsState extends State<LatestJobs> {
                           style: TextStyle(fontSize: 14.0.sp, fontWeight: FontWeight.bold),
                         )),
                   ),
-                   ListView.builder(
+                    ListView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
+
                       var title = snapshot.data![index]['title'];
                       var company = snapshot.data![index]['company_name'];
                       var type = snapshot.data![index]['type'];

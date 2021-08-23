@@ -43,19 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    /*pr = new ProgressDialog(context);
-    pr.style(
-        message: 'Logging In...',
-        borderRadius: kBorderRadius.sp,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0.sp,
-        insetAnimCurve: Curves.easeInOut,
-        progress: 0.0,
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(color: Colors.black, fontSize: 8.0.sp, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(color: Colors.black, fontSize: 12.0.sp, fontWeight: FontWeight.w600));
-*/
     return Scaffold(
         backgroundColor: kSecondaryColor,
         appBar: AppBar(
@@ -221,6 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget TextFormFieldContainer(TextInputType type,
       TextEditingController controller,
       Function onSave,
+      
       IconData icon,
       String hint,
       Function moveFocus,) {
@@ -238,6 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Align(
           alignment: Alignment.centerLeft,
           child: TextFormField(
+            obscureText: false,
             keyboardType: type,
             controller: controller,
             validator: (value) {
@@ -330,11 +319,6 @@ class _LoginScreenState extends State<LoginScreen> {
       //pr.show();
       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => DashBoard()));
 
-
-    /*  Future.delayed(Duration(seconds: 1)).then((value) {
-        pr.hide().whenComplete(() {
-        });
-      });*/
     }
 
     print("Following is res:-" + response.body.toString());
